@@ -3,8 +3,8 @@ package ru.justneedcoffee.domain.usecases.note
 import ru.justneedcoffee.domain.models.NoteModel
 import ru.justneedcoffee.domain.repository.NoteRepository
 
-class AddNoteUseCase(private val noteRepository: NoteRepository, private val note: NoteModel) {
+class EditNoteUseCase(private val noteRepository: NoteRepository, private val note: NoteModel) {
     suspend fun execute() {
-        return noteRepository.addNote(note)
+        return noteRepository.editNote(note)
     }
 }

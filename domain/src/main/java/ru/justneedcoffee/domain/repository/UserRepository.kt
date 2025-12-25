@@ -1,4 +1,4 @@
-package ru.justneedcoffee.domain.repositories
+package ru.justneedcoffee.domain.repository
 
 import ru.justneedcoffee.domain.models.UserModel
 

@@ -10,8 +10,7 @@ val Purple40 = Color(0xFF6650a4)
 val PurpleGrey40 = Color(0xFF625b71)
 val Pink40 = Color(0xFF7D5260)
 
-object Color {
-    val Main = Color(0xFF577456)
-    val Accent = Color(0xFF445B43)
-    val Secondary = Color(0xFFF4FBF4)
-}
+val ColorMain = Color(0xFF577456)
+val ColorAccent = Color(0xFF445B43)
+val ColorSecondary = Color(0xFFF4FBF4)
+val Glass = Color(0xFFC2D9C7)

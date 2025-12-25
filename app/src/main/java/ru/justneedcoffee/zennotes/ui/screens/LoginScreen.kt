@@ -15,12 +15,12 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.compose.ui.text.input.PasswordVisualTransformation
-import androidx.compose.ui.text.input.VisualTransformation
 import ru.justneedcoffee.zennotes.R
 import ru.justneedcoffee.zennotes.ui.theme.ColorMain
 import ru.justneedcoffee.zennotes.ui.theme.ColorSecondary
@@ -29,30 +29,27 @@ import ru.justneedcoffee.zennotes.ui.theme.ZenNotesTheme
 private val InputBorderColor = Color(0xFFD5C9C9)
 
 @Composable
-fun RegistrationScreen(
+fun LoginScreen(
     onBackClick: () -> Unit,
-    onRegisterClick: () -> Unit,
     onLoginClick: () -> Unit,
+    onRegisterClick: () -> Unit,
+    onForgotPasswordClick: () -> Unit,
 ) {
-    // состояние полей
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
-    var repeatPassword by remember { mutableStateOf("") }
-
-    var passwordVisible by remember { mutableStateOf(false) }
-    var repeatPasswordVisible by remember { mutableStateOf(false) }
+    var passwordVisible by remember { mutableStateOf(false) } // по умолчанию скрыт
 
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(ColorSecondary) // F4FBF4
+            .background(ColorSecondary)
     ) {
         Column(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(horizontal = 16.dp, vertical = 16.dp)
         ) {
-            // Экран: стрелка назад + Регистрация по центру
+            // стрелка + "Вход" по центру
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -70,7 +67,7 @@ fun RegistrationScreen(
                 Spacer(modifier = Modifier.height(200.dp))
 
                 Text(
-                    text = stringResource(R.string.reg_title),
+                    text = stringResource(R.string.login_title),
                     style = TextStyle(
                         fontSize = 34.sp,
                         fontWeight = FontWeight.Medium,
@@ -80,10 +77,10 @@ fun RegistrationScreen(
                 )
             }
 
-            Spacer(modifier = Modifier.height(50.dp))
+            Spacer(modifier = Modifier.height(75.dp))
 
-            // Экран: почта
-            RegistrationTextField(
+            // поле почты
+            LoginTextField(
                 value = email,
                 onValueChange = { email = it },
                 placeholder = stringResource(R.string.reg_email_hint),
@@ -94,8 +91,8 @@ fun RegistrationScreen(
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            // Экран: пароль
-            RegistrationTextField(
+            // поле пароля
+            LoginTextField(
                 value = password,
                 onValueChange = { password = it },
                 placeholder = stringResource(R.string.reg_password_hint),
@@ -104,23 +101,11 @@ fun RegistrationScreen(
                 onTogglePasswordVisibility = { passwordVisible = !passwordVisible }
             )
 
-            Spacer(modifier = Modifier.height(16.dp))
+            Spacer(modifier = Modifier.height(90.dp))
 
-            // Экран: повтор пароля
-            RegistrationTextField(
-                value = repeatPassword,
-                onValueChange = { repeatPassword = it },
-                placeholder = stringResource(R.string.reg_repeat_password_hint),
-                isPassword = true,
-                passwordVisible = repeatPasswordVisible,
-                onTogglePasswordVisibility = { repeatPasswordVisible = !repeatPasswordVisible }
-            )
-
-            Spacer(modifier = Modifier.height(80.dp))
-
-            // Кнопка "Зарегистрироваться"
+            // кнопка "Войти"
             Button(
-                onClick = onRegisterClick,
+                onClick = onLoginClick,
                 shape = RoundedCornerShape(12.dp),
                 colors = ButtonDefaults.buttonColors(
                     containerColor = ColorMain,
@@ -133,16 +118,32 @@ fun RegistrationScreen(
                     .height(60.dp)
             ) {
                 Text(
-                    text = stringResource(R.string.reg_button),
+                    text = stringResource(R.string.login_button),
                     fontSize = 18.sp
                 )
             }
 
-            Spacer(modifier = Modifier.height(60.dp))
+            Spacer(modifier = Modifier.height(30.dp))
+
+            // "Забыли пароль?"
+            Text(
+                text = stringResource(R.string.login_forgot),
+                style = TextStyle(
+                    fontSize = 14.sp,
+                    fontWeight = FontWeight.Medium,
+                    color = Color.Black,
+                    textDecoration = TextDecoration.Underline
+                ),
+                modifier = Modifier
+                    .align(Alignment.CenterHorizontally)
+                    .clickable(onClick = onForgotPasswordClick)
+            )
+
+            Spacer(modifier = Modifier.height(35.dp))
 
             // "Или зарегистрируйтесь через"
             Text(
-                text = stringResource(R.string.reg_or_via),
+                text = stringResource(R.string.login_or_via),
                 style = TextStyle(
                     fontSize = 14.sp,
                     fontWeight = FontWeight.Medium,
@@ -153,10 +154,9 @@ fun RegistrationScreen(
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            // Иконки Google / VK / tg
+            // иконки G / VK / TG
             Row(
-                modifier = Modifier
-                    .fillMaxWidth(),
+                modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceEvenly,
                 verticalAlignment = Alignment.CenterVertically
             ) {
@@ -177,31 +177,30 @@ fun RegistrationScreen(
                 )
             }
 
-            Spacer(modifier = Modifier.height(24.dp))
+            Spacer(modifier = Modifier.height(35.dp))
 
-            // "Есть аккаунт? Войти"
+            // "Нет аккаунта? Зарегистрироваться."
             Row(
-                modifier = Modifier
-                    .fillMaxWidth(),
+                modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.Center,
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(
-                    text = stringResource(R.string.reg_have_account) + " ",
+                    text = stringResource(R.string.login_no_account) + " ",
                     style = TextStyle(
                         fontSize = 14.sp,
                         color = ColorMain
                     )
                 )
                 Text(
-                    text = stringResource(R.string.reg_login_link),
+                    text = stringResource(R.string.login_register_link),
                     style = TextStyle(
                         fontSize = 14.sp,
                         color = ColorMain,
                         textDecoration = TextDecoration.Underline,
                         fontWeight = FontWeight.Medium
                     ),
-                    modifier = Modifier.clickable(onClick = onLoginClick)
+                    modifier = Modifier.clickable(onClick = onRegisterClick)
                 )
             }
         }
@@ -209,7 +208,7 @@ fun RegistrationScreen(
 }
 
 @Composable
-private fun RegistrationTextField(
+private fun LoginTextField(
     value: String,
     onValueChange: (String) -> Unit,
     placeholder: String,
@@ -268,12 +267,13 @@ private fun RegistrationTextField(
 
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
-private fun RegistrationScreenPreview() {
+private fun LoginScreenPreview() {
     ZenNotesTheme {
-        RegistrationScreen(
+        LoginScreen(
             onBackClick = {},
+            onLoginClick = {},
             onRegisterClick = {},
-            onLoginClick = {}
+            onForgotPasswordClick = {}
         )
     }
 }
